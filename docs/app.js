@@ -3,15 +3,13 @@ const CATEGORY_EMOJI = {
   '사설스케이트파크': '🏢',
   '스팟': '📍',
   '스케이트샵': '🛒',
-  '스케이트보드 강사': '👟',
 };
 
 const CATEGORY_COLOR = {
-  '공공스케이트파크': '#20B9FC',
-  '사설스케이트파크': '#FF8C00',
-  '스팟': '#2ECC71',
-  '스케이트샵': '#E74C3C',
-  '스케이트보드 강사': '#9B59B6',
+  '공공스케이트파크': '#0284c7',
+  '사설스케이트파크': '#c2610f',
+  '스팟': '#16a34a',
+  '스케이트샵': '#dc2626',
 };
 
 // ── State ──
@@ -21,9 +19,11 @@ let subwayMarkers = [];
 let activeFilter = '전체';
 let searchQuery = '';
 let sortByDistance = false;
+let radiusKm = 0;
 let userLocation = null;
 let userMarker = null;
 let userCircle = null;
+let favorites = new Set(JSON.parse(localStorage.getItem('spotmap_favorites') || '[]'));
 let map;
 let subwayFetchTimer = null;
 
@@ -41,38 +41,63 @@ function formatDistance(km) {
   return km < 1 ? `${Math.round(km * 1000)}m` : `${km.toFixed(1)}km`;
 }
 
-function getFilteredSpots() {
-  let spots = allSpots;
+function saveFavorites() {
+  localStorage.setItem('spotmap_favorites', JSON.stringify([...favorites]));
+}
 
-  if (activeFilter !== '전체') {
+function toggleFavorite(id, e) {
+  e.stopPropagation();
+  if (favorites.has(id)) favorites.delete(id);
+  else favorites.add(id);
+  saveFavorites();
+  refresh();
+}
+
+// ── Filter & Sort ──
+function getFilteredSpots() {
+  let spots = allSpots.map(s => ({
+    ...s,
+    _dist: userLocation ? calcDistance(userLocation.lat, userLocation.lng, s.lat, s.lng) : null,
+    _fav: favorites.has(s.id),
+  }));
+
+  if (activeFilter === '즐겨찾기') {
+    spots = spots.filter(s => s._fav);
+  } else if (activeFilter !== '전체') {
     spots = spots.filter(s => s.category === activeFilter);
   }
+
   if (searchQuery) {
     const q = searchQuery.toLowerCase();
     spots = spots.filter(s =>
       s.name.toLowerCase().includes(q) || s.address.toLowerCase().includes(q)
     );
   }
-  if (sortByDistance && userLocation) {
-    spots = spots
-      .map(s => ({ ...s, _dist: calcDistance(userLocation.lat, userLocation.lng, s.lat, s.lng) }))
-      .sort((a, b) => a._dist - b._dist);
+
+  if (radiusKm > 0 && userLocation) {
+    spots = spots.filter(s => s._dist !== null && s._dist <= radiusKm);
   }
+
+  if (sortByDistance && userLocation) {
+    spots = spots.sort((a, b) => (a._dist ?? 9999) - (b._dist ?? 9999));
+  }
+
   return spots;
 }
 
-// ── Marker icon ──
-function createMarkerIcon(category) {
+// ── Marker icons ──
+function createMarkerIcon(category, isFav) {
   const color = CATEGORY_COLOR[category] || '#888';
   return L.divIcon({
     className: '',
     html: `<div style="
-      width:13px; height:13px; border-radius:50%;
+      width:14px; height:14px; border-radius:50%;
       background:${color}; border:2.5px solid #fff;
       box-shadow:0 1px 5px rgba(0,0,0,0.35);
+      ${isFav ? 'outline:2px solid gold;' : ''}
     "></div>`,
-    iconSize: [13, 13],
-    iconAnchor: [6, 6],
+    iconSize: [14, 14],
+    iconAnchor: [7, 7],
   });
 }
 
@@ -106,8 +131,10 @@ function renderList(spots) {
       ? `<img class="spot-thumb" src="${spot.image}" loading="lazy" onerror="this.style.display='none'">`
       : `<div class="spot-thumb-placeholder">${CATEGORY_EMOJI[spot.category] || '📍'}</div>`;
 
-    const distHtml = spot._dist !== undefined
+    const distHtml = spot._dist !== null
       ? `<span class="spot-distance">${formatDistance(spot._dist)}</span>` : '';
+
+    const favClass = spot._fav ? 'fav-btn active' : 'fav-btn';
 
     li.innerHTML = `
       ${thumb}
@@ -116,8 +143,13 @@ function renderList(spots) {
         <div class="spot-category cat-${spot.category}">${spot.category}</div>
         <div class="spot-address">${spot.address || ''}</div>
       </div>
-      ${distHtml}
+      <div class="spot-right">
+        ${distHtml}
+        <button class="${favClass}" data-id="${spot.id}">${spot._fav ? '♥' : '♡'}</button>
+      </div>
     `;
+
+    li.querySelector('.fav-btn').addEventListener('click', e => toggleFavorite(spot.id, e));
     li.addEventListener('click', () => selectSpot(spot));
     list.appendChild(li);
   });
@@ -128,8 +160,9 @@ function renderMarkers(spots) {
   clusterGroup.clearLayers();
   spots.forEach(spot => {
     if (!spot.lat || !spot.lng) return;
-    const marker = L.marker([spot.lat, spot.lng], { icon: createMarkerIcon(spot.category) })
-      .on('click', () => selectSpot(spot));
+    const marker = L.marker([spot.lat, spot.lng], {
+      icon: createMarkerIcon(spot.category, spot._fav),
+    }).on('click', () => selectSpot(spot));
     clusterGroup.addLayer(marker);
   });
 }
@@ -148,34 +181,13 @@ function selectSpot(spot) {
     item.classList.add('active');
     item.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   }
-  if (spot.lat && spot.lng) map.setView([spot.lat, spot.lng], 15);
+  if (spot.lat && spot.lng) map.setView([spot.lat, spot.lng], 16);
   showDetail(spot);
 }
 
 // ── Detail panel ──
 function showDetail(spot) {
   const panel = document.getElementById('detail-panel');
-  const content = document.getElementById('detail-content');
-
-  const images = spot.images?.length ? spot.images : (spot.image ? [spot.image] : []);
-  let galleryHtml = '';
-  if (images.length) {
-    const cls = images.length === 1 ? 'detail-gallery single' : 'detail-gallery';
-    galleryHtml = `<div class="${cls}">${images.map(src =>
-      `<img src="${src}" loading="lazy" onerror="this.style.display='none'">`
-    ).join('')}</div>`;
-  }
-
-  const distHtml = userLocation && spot.lat
-    ? `<div class="detail-distance">${formatDistance(calcDistance(userLocation.lat, userLocation.lng, spot.lat, spot.lng))} 거리</div>`
-    : '';
-
-  content.innerHTML = `
-    <div class="detail-category cat-${spot.category}">${spot.category}</div>
-    <div class="detail-name">${spot.name || '이름 없음'}</div>
-    <div class="detail-address">${spot.address || '주소 정보 없음'}</div>
-    ${distHtml}
-  `;
   panel.innerHTML = '';
 
   const closeBtn = document.createElement('button');
@@ -184,11 +196,47 @@ function showDetail(spot) {
   closeBtn.addEventListener('click', closeDetail);
   panel.appendChild(closeBtn);
 
-  if (galleryHtml) {
-    const galleryWrapper = document.createElement('div');
-    galleryWrapper.innerHTML = galleryHtml;
-    panel.appendChild(galleryWrapper.firstElementChild);
+  // Gallery
+  const images = spot.images?.length ? spot.images : (spot.image ? [spot.image] : []);
+  if (images.length) {
+    const gallery = document.createElement('div');
+    gallery.className = images.length === 1 ? 'detail-gallery single' : 'detail-gallery';
+    gallery.innerHTML = images.map(src =>
+      `<img src="${src}" loading="lazy" onerror="this.style.display='none'">`
+    ).join('');
+    panel.appendChild(gallery);
   }
+
+  // Content
+  const isFav = favorites.has(spot.id);
+  const distHtml = userLocation && spot.lat
+    ? `<div class="detail-distance">📍 ${formatDistance(calcDistance(userLocation.lat, userLocation.lng, spot.lat, spot.lng))} 거리</div>`
+    : '';
+
+  const naverUrl = `https://map.naver.com/v5/search/${encodeURIComponent(spot.address || spot.name)}`;
+  const kakaoUrl = `https://map.kakao.com/link/to/${encodeURIComponent(spot.name)},${spot.lat},${spot.lng}`;
+
+  const content = document.createElement('div');
+  content.id = 'detail-content';
+  content.innerHTML = `
+    <div class="detail-header">
+      <div>
+        <div class="detail-category cat-${spot.category}">${spot.category}</div>
+        <div class="detail-name">${spot.name || '이름 없음'}</div>
+      </div>
+      <button class="detail-fav ${isFav ? 'active' : ''}" data-id="${spot.id}">${isFav ? '♥' : '♡'}</button>
+    </div>
+    <div class="detail-address">${spot.address || '주소 정보 없음'}</div>
+    ${distHtml}
+    <div class="detail-nav">
+      <a href="${naverUrl}" target="_blank" rel="noopener" class="nav-btn naver">네이버 지도</a>
+      <a href="${kakaoUrl}" target="_blank" rel="noopener" class="nav-btn kakao">카카오맵</a>
+    </div>
+  `;
+  content.querySelector('.detail-fav').addEventListener('click', e => {
+    toggleFavorite(spot.id, e);
+    showDetail({ ...spot, _fav: favorites.has(spot.id) });
+  });
   panel.appendChild(content);
   panel.classList.remove('hidden');
 }
@@ -210,17 +258,19 @@ function onLocationFound(e) {
   if (userCircle) userCircle.remove();
 
   userMarker = L.circleMarker(e.latlng, {
-    radius: 7, color: '#fff', weight: 2,
-    fillColor: '#4A90E2', fillOpacity: 1,
+    radius: 7, color: '#fff', weight: 2.5,
+    fillColor: '#3b82f6', fillOpacity: 1,
   }).addTo(map);
 
   userCircle = L.circle(e.latlng, {
     radius: e.accuracy / 2,
-    color: '#4A90E2', weight: 1,
-    fillColor: '#4A90E2', fillOpacity: 0.1,
+    color: '#3b82f6', weight: 1,
+    fillColor: '#3b82f6', fillOpacity: 0.08,
   }).addTo(map);
 
-  // 위치 확보 후 가까운 순 자동 활성화
+  // 반경 필터 UI 표시
+  document.getElementById('radius-row').classList.remove('hidden');
+
   if (!sortByDistance) toggleSort();
   else refresh();
 }
@@ -229,11 +279,19 @@ function toggleSort() {
   sortByDistance = !sortByDistance;
   const btn = document.getElementById('btn-sort');
   btn.dataset.active = sortByDistance;
-
   if (sortByDistance && !userLocation) {
     map.locate({ setView: true, maxZoom: 14 });
     return;
   }
+  refresh();
+}
+
+// ── Radius filter ──
+function setRadius(km) {
+  radiusKm = km;
+  document.querySelectorAll('.radius-btn').forEach(btn => {
+    btn.classList.toggle('active', Number(btn.dataset.km) === km);
+  });
   refresh();
 }
 
@@ -249,7 +307,6 @@ async function fetchSubwayStations() {
     .s out tags qt;
   `;
   const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
-
   try {
     const res = await fetch(url);
     const data = await res.json();
@@ -286,14 +343,9 @@ async function fetchSubwayStations() {
         zIndexOffset: -100,
       }).addTo(map);
 
-      if (name) {
-        marker.bindTooltip(tooltipHtml, {
-          permanent: true,
-          direction: 'top',
-          offset: [0, -8],
-          className: 'subway-tooltip',
-        });
-      }
+      if (name) marker.bindTooltip(tooltipHtml, {
+        permanent: true, direction: 'top', offset: [0, -8], className: 'subway-tooltip',
+      });
       subwayMarkers.push(marker);
     });
   } catch (e) { /* 조용히 실패 */ }
@@ -303,10 +355,7 @@ function scheduleSubwayFetch() {
   clearTimeout(subwayFetchTimer);
   subwayFetchTimer = setTimeout(() => {
     if (map.getZoom() >= 13) fetchSubwayStations();
-    else {
-      subwayMarkers.forEach(m => m.remove());
-      subwayMarkers = [];
-    }
+    else { subwayMarkers.forEach(m => m.remove()); subwayMarkers = []; }
   }, 600);
 }
 
@@ -332,7 +381,6 @@ async function init() {
 
   map.on('moveend', scheduleSubwayFetch);
   scheduleSubwayFetch();
-
   map.on('locationfound', onLocationFound);
 
   document.getElementById('btn-locate').addEventListener('click', locateMe);
@@ -350,6 +398,10 @@ async function init() {
       btn.classList.add('active');
       refresh();
     });
+  });
+
+  document.querySelectorAll('.radius-btn').forEach(btn => {
+    btn.addEventListener('click', () => setRadius(Number(btn.dataset.km)));
   });
 }
 

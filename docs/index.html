@@ -24,8 +24,19 @@
             <button class="filter-btn" data-category="사설스케이트파크">사설</button>
             <button class="filter-btn" data-category="스팟">스팟</button>
             <button class="filter-btn" data-category="스케이트샵">샵</button>
+            <button class="filter-btn" data-category="즐겨찾기" id="btn-favorites">♥ 즐겨찾기</button>
           </div>
-          <button id="btn-sort" data-active="false">가까운 순</button>
+          <button id="btn-sort" data-active="false">↕ 가까운 순</button>
+        </div>
+        <div id="radius-row" class="hidden">
+          <span class="radius-label">반경</span>
+          <div id="radius-btns">
+            <button class="radius-btn active" data-km="0">전체</button>
+            <button class="radius-btn" data-km="1">1km</button>
+            <button class="radius-btn" data-km="3">3km</button>
+            <button class="radius-btn" data-km="5">5km</button>
+            <button class="radius-btn" data-km="10">10km</button>
+          </div>
         </div>
       </header>
       <div id="list-meta"><span id="list-count"></span></div>

@@ -139,6 +139,40 @@ body {
   color: #555;
 }
 
+/* Radius filter */
+#radius-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #f0f0f0;
+}
+#radius-row.hidden { display: none; }
+
+.radius-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #888;
+  white-space: nowrap;
+}
+
+#radius-btns { display: flex; gap: 5px; flex-wrap: wrap; }
+
+.radius-btn {
+  padding: 4px 10px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 20px;
+  background: #fff;
+  font-size: 11.5px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #666;
+  transition: all 0.15s;
+}
+.radius-btn:hover { border-color: #999; color: #111; }
+.radius-btn.active { background: #3b82f6; color: #fff; border-color: #3b82f6; font-weight: 700; }
+
 /* ─────────────────────────────
    Spot List
 ───────────────────────────── */
@@ -212,6 +246,28 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* Spot right column */
+.spot-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.fav-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #ddd;
+  line-height: 1;
+  padding: 0;
+  transition: color 0.15s, transform 0.1s;
+}
+.fav-btn:hover { color: #f87171; transform: scale(1.2); }
+.fav-btn.active { color: #ef4444; }
 
 .spot-distance {
   font-size: 11.5px;
@@ -314,6 +370,51 @@ body {
 
 #detail-content { padding: 18px 18px 24px; }
 
+/* Detail header row */
+.detail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.detail-fav {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #ddd;
+  padding: 0;
+  flex-shrink: 0;
+  transition: color 0.15s, transform 0.1s;
+  line-height: 1;
+  margin-top: 4px;
+}
+.detail-fav:hover { color: #f87171; transform: scale(1.15); }
+.detail-fav.active { color: #ef4444; }
+
+/* Navigation buttons */
+.detail-nav {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.nav-btn {
+  flex: 1;
+  padding: 10px 0;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+.nav-btn:hover { opacity: 0.85; }
+.nav-btn.naver { background: #03C75A; color: #fff; }
+.nav-btn.kakao { background: #FEE500; color: #3C1E1E; }
+
 .detail-category {
   display: inline-flex;
   align-items: center;
@@ -325,7 +426,7 @@ body {
 }
 
 .detail-name {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 800;
   color: #111;
   margin-bottom: 8px;
