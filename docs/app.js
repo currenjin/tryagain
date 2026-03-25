@@ -167,6 +167,13 @@ function selectSpot(spot) {
     item.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   }
   if (spot.lat && spot.lng) map.setView([spot.lat, spot.lng], 16);
+  // 모바일: 사이드바 닫고 상세 표시
+  const sb = document.getElementById('sidebar');
+  const tgl = document.getElementById('btn-list-toggle');
+  if (sb.classList.contains('open')) {
+    sb.classList.remove('open');
+    if (tgl) tgl.textContent = '목록';
+  }
   showDetail(spot);
 }
 
@@ -305,6 +312,13 @@ async function init() {
 
   document.getElementById('btn-locate').addEventListener('click', locateMe);
   document.getElementById('btn-sort').addEventListener('click', toggleSort);
+
+  const btnListToggle = document.getElementById('btn-list-toggle');
+  const sidebar = document.getElementById('sidebar');
+  btnListToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('open');
+    btnListToggle.textContent = sidebar.classList.contains('open') ? '닫기' : '목록';
+  });
 
   document.getElementById('search').addEventListener('input', e => {
     searchQuery = e.target.value.trim();

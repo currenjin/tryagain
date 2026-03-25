@@ -547,46 +547,74 @@ body {
 /* ─────────────────────────────
    Mobile
 ───────────────────────────── */
+#btn-list-toggle { display: none; }
+
 @media (max-width: 600px) {
-  body { overflow: auto; }
+  /* 지도 풀스크린 */
+  #app { display: block; height: 100vh; }
+  #map-wrap { position: fixed; inset: 0; z-index: 1; }
 
-  #app { flex-direction: column; height: auto; }
-
-  #map-wrap {
-    position: sticky;
-    top: 0;
-    height: 45vh;
-    min-height: 45vh;
-    order: 1;
-    z-index: 100;
+  /* 목록 버튼 */
+  #btn-list-toggle {
+    display: block;
+    position: absolute;
+    bottom: 72px;
+    right: 16px;
+    z-index: 500;
+    padding: 9px 18px;
+    background: var(--black);
+    border: 2px solid var(--gold);
+    border-radius: 0;
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: var(--gold);
+    box-shadow: 3px 3px 0 rgba(0,0,0,0.18);
   }
 
+  /* 사이드바 — 바텀 드로어 */
   #sidebar {
-    width: 100%; min-width: 0;
-    height: auto;
-    overflow: visible;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 80vh;
+    min-width: 0;
     border-right: none;
-    order: 2;
+    border-top: 3px solid var(--gold);
+    z-index: 200;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
   }
+  #sidebar.open { transform: translateY(0); }
 
-  #spot-list {
-    overflow: visible;
-    height: auto;
-  }
-
-  #sidebar header { padding: 14px 16px 12px; }
-  #sidebar h1 { font-size: 32px; line-height: 0.9; }
-  #brand { margin-bottom: 10px; }
-  #brand::after { margin-top: 10px; }
+  #sidebar header { padding: 14px 16px 12px; flex-shrink: 0; }
+  #sidebar h1 { font-size: 30px; line-height: 0.9; }
+  #brand { margin-bottom: 8px; }
+  #brand::after { display: none; }
   .slogan { display: none; }
   #search-wrap { margin-bottom: 8px; }
   #search { padding: 9px 12px 9px 28px; font-size: 14px; }
   .filter-btn { padding: 5px 10px; font-size: 13px; }
   #btn-sort { padding: 5px 10px; font-size: 13px; }
+  #list-meta { flex-shrink: 0; }
+  #spot-list { flex: 1; overflow-y: auto; }
   .spot-item { padding: 10px 16px; gap: 10px; }
   .spot-name { font-size: 16px; }
   .spot-address { font-size: 12px; }
   .spot-thumb, .spot-thumb-placeholder { width: 44px; height: 44px; }
-  #detail-panel { left: 0 !important; width: 100% !important; }
-  #btn-locate { bottom: 12px; right: 12px; padding: 8px 14px; font-size: 11px; }
+
+  /* 상세 패널 — 풀 바텀시트 */
+  #detail-panel {
+    left: 0 !important;
+    width: 100% !important;
+    max-height: 80vh;
+    z-index: 300;
+  }
+
+  #btn-locate { bottom: 12px; right: 16px; padding: 9px 18px; font-size: 12px; }
 }
