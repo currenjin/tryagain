@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>spotmap</title>
+  <title>spotmap — 스케이트는 끊임없는 자기혐오</title>
+  <meta name="description" content="스케이트는 끊임없는 자기혐오. 내 주변 스케이트보드 스팟을 찾아보세요.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%23000'/><text y='.9em' font-size='72' font-family='Arial Black' x='50%' dominant-baseline='auto' text-anchor='middle' fill='white' dy='0.85em'>S</text></svg>">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
@@ -13,7 +15,10 @@
   <div id="app">
     <aside id="sidebar">
       <header>
-        <h1>spotmap</h1>
+        <div id="brand">
+          <h1>spotmap</h1>
+          <p class="slogan">스케이트는 끊임없는 자기혐오</p>
+        </div>
         <div id="search-wrap">
           <input id="search" type="text" placeholder="스팟 이름, 주소 검색">
         </div>
@@ -24,7 +29,7 @@
             <button class="filter-btn" data-category="사설스케이트파크">사설</button>
             <button class="filter-btn" data-category="스팟">스팟</button>
             <button class="filter-btn" data-category="스케이트샵">샵</button>
-            <button class="filter-btn" data-category="즐겨찾기" id="btn-favorites">♥ 즐겨찾기</button>
+            <button class="filter-btn" data-category="즐겨찾기" id="btn-favorites">♥</button>
           </div>
           <button id="btn-sort" data-active="false">↕ 가까운 순</button>
         </div>
@@ -45,7 +50,7 @@
 
     <div id="map-wrap">
       <div id="map"></div>
-      <button id="btn-locate">📍 내 위치</button>
+      <button id="btn-locate">내 위치</button>
     </div>
   </div>
 
