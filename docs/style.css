@@ -549,9 +549,31 @@ body {
 ───────────────────────────── */
 @media (max-width: 600px) {
   #app { flex-direction: column; }
-  #sidebar { width: 100%; min-width: 0; height: 44vh; border-right: none; border-top: 2px solid var(--gold); order: 2; }
-  #sidebar h1 { font-size: 50px; }
-  #map-wrap { height: 56vh; order: 1; }
+  #sidebar {
+    width: 100%; min-width: 0;
+    height: 50vh;
+    border-right: none;
+    border-top: 2px solid var(--gold);
+    order: 2;
+  }
+  #sidebar header {
+    padding: 14px 16px 12px;
+  }
+  #sidebar h1 { font-size: 32px; line-height: 0.9; }
+  #brand { margin-bottom: 10px; }
+  #brand::after { margin-top: 10px; }
+  .slogan { display: none; }
+  #search-wrap { margin-bottom: 8px; }
+  #search { padding: 9px 12px 9px 28px; font-size: 14px; }
+  #controls { gap: 4px; }
+  .filter-btn { padding: 5px 10px; font-size: 13px; }
+  #btn-sort { padding: 5px 10px; font-size: 13px; }
+  #list-meta { padding: 7px 16px; }
+  .spot-item { padding: 10px 16px; gap: 10px; }
+  .spot-name { font-size: 16px; }
+  .spot-address { font-size: 12px; }
+  .spot-thumb, .spot-thumb-placeholder { width: 44px; height: 44px; }
+  #map-wrap { height: 50vh; order: 1; }
   #detail-panel { left: 0 !important; width: 100% !important; }
-  #btn-locate { bottom: 12px; right: 12px; }
+  #btn-locate { bottom: 12px; right: 12px; padding: 8px 14px; font-size: 11px; }
 }
