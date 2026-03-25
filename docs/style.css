@@ -98,7 +98,7 @@ body {
   border-radius: 0;
   background: rgba(255,255,255,0.07);
   color: var(--white);
-  font-size: 13px;
+  font-size: 15px;
   font-family: var(--font-body);
   outline: none;
   transition: border-color 0.12s, background 0.12s;
@@ -114,12 +114,12 @@ body {
 #filters { display: flex; gap: 4px; flex: 1; flex-wrap: wrap; }
 
 .filter-btn {
-  padding: 6px 14px;
+  padding: 7px 15px;
   border: 1px solid rgba(255,255,255,0.2);
   border-radius: 0;
   background: transparent;
   font-family: var(--font-display);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -137,12 +137,12 @@ body {
 }
 
 #btn-sort {
-  padding: 6px 14px;
+  padding: 7px 15px;
   border: 1px solid rgba(255,255,255,0.2);
   border-radius: 0;
   background: transparent;
   font-family: var(--font-display);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -172,7 +172,7 @@ body {
 
 .radius-label {
   font-family: var(--font-display);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   color: rgba(255,255,255,0.35);
   text-transform: uppercase;
@@ -183,12 +183,12 @@ body {
 #radius-btns { display: flex; gap: 4px; }
 
 .radius-btn {
-  padding: 3px 9px;
+  padding: 4px 10px;
   border: 1px solid rgba(255,255,255,0.2);
   border-radius: 0;
   background: transparent;
   font-family: var(--font-display);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -212,7 +212,7 @@ body {
 }
 #list-count {
   font-family: var(--font-display);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--text-muted);
   letter-spacing: 0.12em;
@@ -299,7 +299,7 @@ body {
 .spot-category {
   display: inline-block;
   font-family: var(--font-display);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -309,7 +309,7 @@ body {
 }
 
 .spot-address {
-  font-size: 12.5px;
+  font-size: 14px;
   color: #aaa;
   white-space: nowrap;
   overflow: hidden;
@@ -326,7 +326,7 @@ body {
 
 .spot-distance {
   font-family: var(--font-display);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--gold);
   letter-spacing: 0.04em;
