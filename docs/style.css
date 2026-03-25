@@ -1,0 +1,196 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; height: 100vh; overflow: hidden; }
+
+#app {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar */
+#sidebar {
+  width: 320px;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-right: 1px solid #e5e5e5;
+  overflow: hidden;
+}
+
+#sidebar header {
+  padding: 16px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+#sidebar h1 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #111;
+}
+
+#filters {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 4px 10px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  background: #fff;
+  font-size: 12px;
+  cursor: pointer;
+  color: #555;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover { border-color: #333; color: #333; }
+.filter-btn.active { background: #111; color: #fff; border-color: #111; }
+
+/* Spot list */
+#spot-list {
+  list-style: none;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.spot-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background 0.1s;
+}
+
+.spot-item:hover { background: #f8f8f8; }
+.spot-item.active { background: #f0f7ff; }
+
+.spot-thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: #eee;
+  flex-shrink: 0;
+}
+
+.spot-thumb-placeholder {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  background: #eee;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.spot-info { overflow: hidden; }
+
+.spot-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.spot-category {
+  font-size: 11px;
+  color: #888;
+  margin-top: 2px;
+}
+
+.spot-address {
+  font-size: 12px;
+  color: #999;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Map */
+#map { flex: 1; }
+
+/* Detail panel */
+#detail-panel {
+  position: fixed;
+  bottom: 0;
+  left: 320px;
+  width: 300px;
+  max-height: 60vh;
+  background: #fff;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+  overflow-y: auto;
+  z-index: 1000;
+  transition: transform 0.2s;
+}
+
+#detail-panel.hidden { display: none; }
+
+#detail-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #999;
+  line-height: 1;
+}
+
+#detail-content { padding: 20px; }
+
+.detail-img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.detail-category {
+  font-size: 11px;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.detail-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 8px;
+}
+
+.detail-address {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* Category colors */
+.cat-공공스케이트파크 { color: #20B9FC; }
+.cat-사설스케이트파크 { color: #FF8C00; }
+.cat-스팟 { color: #2ECC71; }
+.cat-스케이트샵 { color: #E74C3C; }
+.cat-스케이트보드\ 강사 { color: #9B59B6; }
+
+/* Mobile */
+@media (max-width: 600px) {
+  #sidebar { width: 100%; position: absolute; z-index: 500; height: 40vh; bottom: 0; border-right: none; border-top: 1px solid #e5e5e5; }
+  #app { flex-direction: column; }
+  #map { height: 60vh; }
+  #detail-panel { left: 0; width: 100%; }
+}

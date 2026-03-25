@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>spotmap</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <aside id="sidebar">
+      <header>
+        <h1>spotmap</h1>
+        <div id="filters">
+          <button class="filter-btn active" data-category="전체">전체</button>
+          <button class="filter-btn" data-category="공공스케이트파크">공공</button>
+          <button class="filter-btn" data-category="사설스케이트파크">사설</button>
+          <button class="filter-btn" data-category="스팟">스팟</button>
+          <button class="filter-btn" data-category="스케이트샵">샵</button>
+        </div>
+      </header>
+      <ul id="spot-list"></ul>
+    </aside>
+    <div id="map"></div>
+  </div>
+
+  <div id="detail-panel" class="hidden">
+    <button id="detail-close">✕</button>
+    <div id="detail-content"></div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
