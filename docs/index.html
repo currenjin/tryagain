@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>spotmap</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,20 +14,28 @@
     <aside id="sidebar">
       <header>
         <h1>spotmap</h1>
-        <div id="filters">
-          <button class="filter-btn active" data-category="전체">전체</button>
-          <button class="filter-btn" data-category="공공스케이트파크">공공</button>
-          <button class="filter-btn" data-category="사설스케이트파크">사설</button>
-          <button class="filter-btn" data-category="스팟">스팟</button>
-          <button class="filter-btn" data-category="스케이트샵">샵</button>
+        <div id="search-wrap">
+          <input id="search" type="text" placeholder="스팟 이름, 주소 검색">
+        </div>
+        <div id="controls">
+          <div id="filters">
+            <button class="filter-btn active" data-category="전체">전체</button>
+            <button class="filter-btn" data-category="공공스케이트파크">공공</button>
+            <button class="filter-btn" data-category="사설스케이트파크">사설</button>
+            <button class="filter-btn" data-category="스팟">스팟</button>
+            <button class="filter-btn" data-category="스케이트샵">샵</button>
+          </div>
+          <button id="btn-sort" data-active="false">가까운 순</button>
         </div>
       </header>
-      <div id="locate-wrap">
-        <button id="btn-locate">📍 내 위치</button>
-      </div>
+      <div id="list-meta"><span id="list-count"></span></div>
       <ul id="spot-list"></ul>
     </aside>
-    <div id="map"></div>
+
+    <div id="map-wrap">
+      <div id="map"></div>
+      <button id="btn-locate">📍 내 위치</button>
+    </div>
   </div>
 
   <div id="detail-panel" class="hidden">
@@ -34,6 +44,7 @@
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

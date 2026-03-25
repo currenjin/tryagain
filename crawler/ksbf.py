@@ -77,7 +77,17 @@ def get_spot_detail(idx):
         if match:
             image = match.group(1)
 
-    return {"name": name, "address": address, "image": image}
+    images = []
+    body_div = soup.select_one(".substance.fr-view")
+    if body_div:
+        for img in body_div.find_all("img"):
+            src = img.get("src", "").strip()
+            if src and src not in images:
+                images.append(src)
+    if image and image not in images:
+        images.insert(0, image)
+
+    return {"name": name, "address": address, "image": image, "images": images}
 
 
 def crawl():
@@ -103,6 +113,7 @@ def crawl():
                 "lng": float(marker.get("pos_x", 0)),
                 "address": detail.get("address", ""),
                 "image": detail.get("image", ""),
+                "images": detail.get("images", []),
                 "source": "ksbf",
             }
             spots.append(spot)
