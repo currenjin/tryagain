@@ -310,7 +310,7 @@ async function fetchSubwayStations() {
     subwayMarkers = [];
 
     data.elements.forEach(el => {
-      if (el.type !== 'node') return;
+      if (el.type !== 'node' || !el.lat || !el.lon) return;
       const name = el.tags?.name || '';
       const color = el.tags?.colour || el.tags?.color || '#777';
       const line = el.tags?.['network:short'] || el.tags?.line || '';
@@ -333,7 +333,7 @@ async function fetchSubwayStations() {
 function scheduleSubwayFetch() {
   clearTimeout(subwayFetchTimer);
   subwayFetchTimer = setTimeout(() => {
-    if (map.getZoom() >= 11) fetchSubwayStations();
+    if (map.getZoom() >= 13) fetchSubwayStations();
     else { subwayMarkers.forEach(m => m.remove()); subwayMarkers = []; }
   }, 600);
 }
