@@ -91,13 +91,13 @@ function createMarkerIcon(category, isFav) {
   return L.divIcon({
     className: '',
     html: `<div style="
-      width:14px; height:14px; border-radius:50%;
-      background:${color}; border:2.5px solid #fff;
-      box-shadow:0 1px 5px rgba(0,0,0,0.35);
-      ${isFav ? 'outline:2px solid gold;' : ''}
+      width:18px; height:18px; border-radius:50%;
+      background:${color}; border:3px solid #fff;
+      box-shadow:0 2px 8px rgba(0,0,0,0.4);
+      ${isFav ? 'outline:2.5px solid #B8922A; outline-offset:2px;' : ''}
     "></div>`,
-    iconSize: [14, 14],
-    iconAnchor: [7, 7],
+    iconSize: [18, 18],
+    iconAnchor: [9, 9],
   });
 }
 
@@ -106,12 +106,12 @@ function subwayDotIcon(colors) {
   return L.divIcon({
     className: '',
     html: `<div style="
-      width:10px; height:10px; border-radius:50%;
-      background:${bg}; border:1.5px solid #fff;
-      box-shadow:0 1px 3px rgba(0,0,0,0.3);
+      width:13px; height:13px; border-radius:50%;
+      background:${bg}; border:2px solid #fff;
+      box-shadow:0 1px 4px rgba(0,0,0,0.35);
     "></div>`,
-    iconSize: [10, 10],
-    iconAnchor: [5, 5],
+    iconSize: [13, 13],
+    iconAnchor: [6, 6],
   });
 }
 
@@ -354,14 +354,14 @@ async function fetchSubwayStations() {
 function scheduleSubwayFetch() {
   clearTimeout(subwayFetchTimer);
   subwayFetchTimer = setTimeout(() => {
-    if (map.getZoom() >= 13) fetchSubwayStations();
+    if (map.getZoom() >= 11) fetchSubwayStations();
     else { subwayMarkers.forEach(m => m.remove()); subwayMarkers = []; }
   }, 600);
 }
 
 // ── Init ──
 async function init() {
-  map = L.map('map').setView([37.5665, 126.978], 12);
+  map = L.map('map').setView([37.5665, 126.978], 11);
 
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     attribution: '© OpenStreetMap contributors © CARTO',
