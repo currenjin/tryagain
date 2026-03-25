@@ -300,8 +300,8 @@ async function fetchSubwayStations() {
   const bounds = map.getBounds();
   const bbox = `${bounds.getSouth()},${bounds.getWest()},${bounds.getNorth()},${bounds.getEast()}`;
   const query = `
-    [out:json][timeout:20];
-    node["railway"="station"]["subway"="yes"](${bbox})->.s;
+    [out:json][timeout:25];
+    node["railway"="station"]["station"="subway"](${bbox})->.s;
     rel["route"="subway"](bn.s);
     out tags members qt;
     .s out tags qt;
@@ -348,7 +348,7 @@ async function fetchSubwayStations() {
       });
       subwayMarkers.push(marker);
     });
-  } catch (e) { /* 조용히 실패 */ }
+  } catch (e) { console.warn('subway fetch failed:', e); }
 }
 
 function scheduleSubwayFetch() {
