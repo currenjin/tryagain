@@ -32,6 +32,10 @@
         <div id="search-wrap">
           <input id="search" type="text" placeholder="스팟 이름, 주소 검색">
         </div>
+        <div id="view-tabs">
+          <button class="view-tab active" data-view="spots">Spots</button>
+          <button class="view-tab" data-view="tricks">Tricks</button>
+        </div>
         <div id="controls">
           <div id="filters">
             <button class="filter-btn active" data-category="전체">전체</button>
@@ -56,6 +60,7 @@
       </header>
       <div id="list-meta"><span id="list-count"></span></div>
       <ul id="spot-list"></ul>
+      <ul id="trick-list" class="hidden"></ul>
     </aside>
 
     <div id="map-wrap">

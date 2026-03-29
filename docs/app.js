@@ -12,10 +12,11 @@ const CATEGORY_COLOR = {
   '스케이트샵': '#dc2626',
 };
 
-// ── State ──
 let allSpots = [];
+let allTricks = [];
 let clusterGroup;
 let activeFilter = '전체';
+let activeView = 'spots';
 let searchQuery = '';
 let sortByDistance = false;
 let radiusKm = 0;
@@ -25,7 +26,6 @@ let userCircle = null;
 let favorites = new Set(JSON.parse(localStorage.getItem('tryagain_favorites') || '[]'));
 let map;
 
-// ── Helpers ──
 function calcDistance(lat1, lng1, lat2, lng2) {
   const R = 6371;
   const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -51,7 +51,6 @@ function toggleFavorite(id, e) {
   refresh();
 }
 
-// ── Filter & Sort ──
 function getFilteredSpots() {
   let spots = allSpots.map(s => ({
     ...s,
@@ -83,7 +82,21 @@ function getFilteredSpots() {
   return spots;
 }
 
-// ── Marker icons ──
+function getFilteredTricks() {
+  let tricks = [...allTricks];
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    tricks = tricks.filter(t =>
+      t.name.toLowerCase().includes(q) ||
+      t.summary.toLowerCase().includes(q) ||
+      (t.tags || []).some(tag => tag.toLowerCase().includes(q))
+    );
+  }
+
+  const order = { '입문': 1, '초급': 2, '중급': 3, '고급': 4 };
+  return tricks.sort((a, b) => (order[a.difficulty] || 99) - (order[b.difficulty] || 99));
+}
+
 function createMarkerIcon(category, isFav) {
   const color = CATEGORY_COLOR[category] || '#888';
   return L.divIcon({
@@ -99,8 +112,6 @@ function createMarkerIcon(category, isFav) {
   });
 }
 
-
-// ── Render list ──
 function renderList(spots) {
   const list = document.getElementById('spot-list');
   const count = document.getElementById('list-count');
@@ -140,9 +151,36 @@ function renderList(spots) {
   });
 }
 
-// ── Render markers ──
+function renderTrickList(tricks) {
+  const list = document.getElementById('trick-list');
+  const count = document.getElementById('list-count');
+  list.innerHTML = '';
+  count.textContent = `${tricks.length}개 트릭`;
+
+  tricks.forEach(trick => {
+    const li = document.createElement('li');
+    li.className = 'trick-item';
+    li.dataset.id = trick.id;
+    li.innerHTML = `
+      <div class="trick-title-row">
+        <div class="trick-name">${trick.name}</div>
+      </div>
+      <div class="trick-badges">
+        <span class="trick-badge diff-${trick.difficulty}">${trick.difficulty}</span>
+        <span class="trick-badge">${trick.category}</span>
+        <span class="trick-badge">risk ${trick.risk_level}</span>
+      </div>
+      <div class="trick-summary">${trick.summary}</div>
+    `;
+    li.addEventListener('click', () => selectTrick(trick));
+    list.appendChild(li);
+  });
+}
+
 function renderMarkers(spots) {
   clusterGroup.clearLayers();
+  if (activeView !== 'spots') return;
+
   spots.forEach(spot => {
     if (!spot.lat || !spot.lng) return;
     const marker = L.marker([spot.lat, spot.lng], {
@@ -153,12 +191,27 @@ function renderMarkers(spots) {
 }
 
 function refresh() {
-  const spots = getFilteredSpots();
-  renderList(spots);
-  renderMarkers(spots);
+  const spotList = document.getElementById('spot-list');
+  const trickList = document.getElementById('trick-list');
+
+  if (activeView === 'spots') {
+    spotList.classList.remove('hidden');
+    trickList.classList.add('hidden');
+    document.getElementById('controls').classList.remove('hidden');
+    const spots = getFilteredSpots();
+    renderList(spots);
+    renderMarkers(spots);
+  } else {
+    spotList.classList.add('hidden');
+    trickList.classList.remove('hidden');
+    document.getElementById('controls').classList.add('hidden');
+    document.getElementById('radius-row').classList.add('hidden');
+    renderMarkers([]);
+    const tricks = getFilteredTricks();
+    renderTrickList(tricks);
+  }
 }
 
-// ── Select spot ──
 function selectSpot(spot) {
   document.querySelectorAll('.spot-item').forEach(el => el.classList.remove('active'));
   const item = document.querySelector(`.spot-item[data-id="${spot.id}"]`);
@@ -167,18 +220,27 @@ function selectSpot(spot) {
     item.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   }
   if (spot.lat && spot.lng) map.setView([spot.lat, spot.lng], 16);
-  // 모바일: 사이드바 닫고 상세 표시
+
   const sb = document.getElementById('sidebar');
   const tgl = document.getElementById('btn-list-toggle');
   if (sb.classList.contains('open')) {
     sb.classList.remove('open');
     if (tgl) tgl.textContent = '목록';
   }
-  showDetail(spot);
+  showSpotDetail(spot);
 }
 
-// ── Detail panel ──
-function showDetail(spot) {
+function selectTrick(trick) {
+  document.querySelectorAll('.trick-item').forEach(el => el.classList.remove('active'));
+  const item = document.querySelector(`.trick-item[data-id="${trick.id}"]`);
+  if (item) {
+    item.classList.add('active');
+    item.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+  showTrickDetail(trick);
+}
+
+function showSpotDetail(spot) {
   const panel = document.getElementById('detail-panel');
   panel.innerHTML = '';
 
@@ -188,7 +250,6 @@ function showDetail(spot) {
   closeBtn.addEventListener('click', closeDetail);
   panel.appendChild(closeBtn);
 
-  // Gallery
   const images = spot.images?.length ? spot.images : (spot.image ? [spot.image] : []);
   if (images.length) {
     const gallery = document.createElement('div');
@@ -199,7 +260,6 @@ function showDetail(spot) {
     panel.appendChild(gallery);
   }
 
-  // Content
   const isFav = favorites.has(spot.id);
   const distHtml = userLocation && spot.lat
     ? `<div class="detail-distance">📍 ${formatDistance(calcDistance(userLocation.lat, userLocation.lng, spot.lat, spot.lng))} 거리</div>`
@@ -227,19 +287,71 @@ function showDetail(spot) {
   `;
   content.querySelector('.detail-fav').addEventListener('click', e => {
     toggleFavorite(spot.id, e);
-    showDetail({ ...spot, _fav: favorites.has(spot.id) });
+    showSpotDetail({ ...spot, _fav: favorites.has(spot.id) });
   });
+  panel.appendChild(content);
+  panel.classList.remove('hidden');
+}
+
+function showTrickDetail(trick) {
+  const panel = document.getElementById('detail-panel');
+  panel.innerHTML = '';
+
+  const closeBtn = document.createElement('button');
+  closeBtn.id = 'detail-close';
+  closeBtn.textContent = '✕';
+  closeBtn.addEventListener('click', closeDetail);
+  panel.appendChild(closeBtn);
+
+  const content = document.createElement('div');
+  content.id = 'detail-content';
+  content.innerHTML = `
+    <div class="detail-header">
+      <div>
+        <div class="detail-category diff-${trick.difficulty}">${trick.difficulty}</div>
+        <div class="detail-name">${trick.name}</div>
+      </div>
+    </div>
+    <div class="detail-address">${trick.summary}</div>
+    <div class="trick-badges" style="margin-top:12px;">
+      <span class="trick-badge">${trick.category}</span>
+      <span class="trick-badge">${trick.stance}</span>
+      <span class="trick-badge">risk ${trick.risk_level}</span>
+    </div>
+    <div style="margin-top:16px;">
+      <strong>핵심 포인트</strong>
+      <ul style="margin-top:8px; padding-left:18px; line-height:1.7; color:#666;">
+        ${(trick.key_points || []).map(x => `<li>${x}</li>`).join('')}
+      </ul>
+    </div>
+    <div style="margin-top:16px;">
+      <strong>자주 망하는 포인트</strong>
+      <ul style="margin-top:8px; padding-left:18px; line-height:1.7; color:#666;">
+        ${(trick.common_mistakes || []).map(x => `<li>${x}</li>`).join('')}
+      </ul>
+    </div>
+    <div style="margin-top:16px;">
+      <strong>연습 드릴</strong>
+      <ol style="margin-top:8px; padding-left:18px; line-height:1.7; color:#666;">
+        ${(trick.drills || []).map(x => `<li>${x}</li>`).join('')}
+      </ol>
+    </div>
+    <div style="margin-top:16px;">
+      <strong>선행 트릭</strong>
+      <div style="margin-top:8px; color:#666;">${(trick.prerequisites || []).length ? trick.prerequisites.join(', ') : '없음'}</div>
+    </div>
+  `;
   panel.appendChild(content);
   panel.classList.remove('hidden');
 }
 
 function closeDetail() {
   document.getElementById('detail-panel').classList.add('hidden');
-  document.querySelectorAll('.spot-item').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.spot-item, .trick-item').forEach(el => el.classList.remove('active'));
 }
 
-// ── Geolocation ──
 function locateMe() {
+  if (activeView !== 'spots') return;
   map.locate({ setView: true, maxZoom: 14 });
 }
 
@@ -260,7 +372,6 @@ function onLocationFound(e) {
     fillColor: '#3b82f6', fillOpacity: 0.08,
   }).addTo(map);
 
-  // 반경 필터 UI 표시
   document.getElementById('radius-row').classList.remove('hidden');
 
   if (!sortByDistance) toggleSort();
@@ -278,7 +389,6 @@ function toggleSort() {
   refresh();
 }
 
-// ── Radius filter ──
 function setRadius(km) {
   radiusKm = km;
   document.querySelectorAll('.radius-btn').forEach(btn => {
@@ -287,8 +397,17 @@ function setRadius(km) {
   refresh();
 }
 
+function switchView(view) {
+  activeView = view;
+  document.querySelectorAll('.view-tab').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.view === view);
+  });
 
-// ── Init ──
+  const search = document.getElementById('search');
+  search.placeholder = view === 'spots' ? '스팟 이름, 주소 검색' : '트릭 이름, 키워드 검색';
+  refresh();
+}
+
 async function init() {
   map = L.map('map').setView([37.5665, 126.978], 11);
 
@@ -304,8 +423,12 @@ async function init() {
   });
   map.addLayer(clusterGroup);
 
-  const res = await fetch('data/spots.json');
-  allSpots = await res.json();
+  const [spotsRes, tricksRes] = await Promise.all([
+    fetch('data/spots.json'),
+    fetch('data/tricks.json')
+  ]);
+  allSpots = await spotsRes.json();
+  allTricks = await tricksRes.json();
   refresh();
 
   map.on('locationfound', onLocationFound);
@@ -336,6 +459,10 @@ async function init() {
 
   document.querySelectorAll('.radius-btn').forEach(btn => {
     btn.addEventListener('click', () => setRadius(Number(btn.dataset.km)));
+  });
+
+  document.querySelectorAll('.view-tab').forEach(btn => {
+    btn.addEventListener('click', () => switchView(btn.dataset.view));
   });
 }
 

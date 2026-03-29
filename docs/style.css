@@ -109,6 +109,34 @@ body {
   background: rgba(255,255,255,0.1);
 }
 
+/* View tabs */
+#view-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.view-tab {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid rgba(255,255,255,0.22);
+  background: transparent;
+  color: rgba(255,255,255,0.55);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.view-tab.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--black);
+  font-weight: 900;
+}
+
 /* Controls */
 #controls { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 #filters { display: flex; gap: 4px; flex: 1; flex-wrap: wrap; }
@@ -222,12 +250,16 @@ body {
 /* ─────────────────────────────
    Spot List
 ───────────────────────────── */
-#spot-list {
+#spot-list,
+#trick-list {
   list-style: none;
   overflow-y: auto;
   flex: 1;
-  counter-reset: spot-counter;
 }
+
+#spot-list { counter-reset: spot-counter; }
+
+.hidden { display: none !important; }
 #spot-list::-webkit-scrollbar { width: 3px; }
 #spot-list::-webkit-scrollbar-thumb { background: var(--border); }
 
@@ -351,6 +383,66 @@ body {
 .cat-사설스케이트파크  { color: #c25a00; }
 .cat-스팟              { color: #1a7a35; }
 .cat-스케이트샵        { color: #8a1a1a; }
+
+/* Tricks list */
+.trick-item {
+  padding: 14px 22px;
+  border-bottom: 1px solid #f0ede8;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.trick-item:hover { background: var(--surface); }
+.trick-item.active {
+  background: #fdf8ee;
+  border-left: 3px solid var(--gold);
+  padding-left: 19px;
+}
+
+.trick-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.trick-name {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+}
+
+.trick-badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+
+.trick-badge {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border: 1px solid var(--border);
+  color: #666;
+}
+
+.trick-summary {
+  font-size: 13px;
+  color: #777;
+  line-height: 1.5;
+}
+
+.diff-입문 { color: #0284c7; border-color: #0284c7; }
+.diff-초급 { color: #16a34a; border-color: #16a34a; }
+.diff-중급 { color: #b45309; border-color: #b45309; }
+.diff-고급 { color: #b91c1c; border-color: #b91c1c; }
 
 /* ─────────────────────────────
    Map
