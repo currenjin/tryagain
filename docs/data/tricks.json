@@ -11,7 +11,8 @@
     "drills": ["정지 상태 팝 20회", "라인 위에서 낮은 올리 20회", "작은 크랙 넘기기"],
     "prerequisites": [],
     "risk_level": 1,
-    "tags": ["pop", "timing", "foundation"]
+    "tags": ["pop", "timing", "foundation"],
+    "video": "https://www.youtube.com/watch?v=VasSLuFO4wY"
   },
   {
     "id": "fs180",
@@ -25,7 +26,8 @@
     "drills": ["제자리 바디 180", "작은 속도로 FS 회전", "롤링 FS180 반복"],
     "prerequisites": ["ollie"],
     "risk_level": 2,
-    "tags": ["rotation", "shoulder"]
+    "tags": ["rotation", "shoulder"],
+    "video": "https://www.youtube.com/watch?v=6kKWBjeZVKM"
   },
   {
     "id": "bs180",
@@ -39,7 +41,8 @@
     "drills": ["제자리 BS 스핀", "낮은 높이 BS180", "롤링 반복"],
     "prerequisites": ["ollie"],
     "risk_level": 2,
-    "tags": ["rotation", "balance"]
+    "tags": ["rotation", "balance"],
+    "video": "https://www.youtube.com/watch?v=ChrHsCRizS0"
   },
   {
     "id": "pop_shuvit",
@@ -53,7 +56,8 @@
     "drills": ["스쿱 동작만 반복", "낮은 팝 슈빗", "롤링 캐치 연습"],
     "prerequisites": ["ollie"],
     "risk_level": 2,
-    "tags": ["scoop", "catch"]
+    "tags": ["scoop", "catch"],
+    "video": "https://www.youtube.com/watch?v=2BXzIWbSo-4"
   },
   {
     "id": "kickflip",
@@ -67,7 +71,8 @@
     "drills": ["플릭 동작 드릴", "킥플립 캐치 연습", "저속 롤링 시도"],
     "prerequisites": ["ollie", "pop_shuvit"],
     "risk_level": 3,
-    "tags": ["flip", "timing"]
+    "tags": ["flip", "timing"],
+    "video": "https://www.youtube.com/watch?v=9siogRgZo3Y"
   },
   {
     "id": "heelflip",
@@ -81,7 +86,8 @@
     "drills": ["발 포지션 고정", "제자리 힐플립", "저속 롤링 힐플립"],
     "prerequisites": ["ollie"],
     "risk_level": 3,
-    "tags": ["flip", "control"]
+    "tags": ["flip", "control"],
+    "video": "https://www.youtube.com/watch?v=phsJk5_jHkU"
   },
   {
     "id": "varial_flip",
@@ -95,7 +101,8 @@
     "drills": ["팝슈빗 안정화", "킥플립 안정화", "낮은 바리얼 시도"],
     "prerequisites": ["kickflip", "pop_shuvit"],
     "risk_level": 3,
-    "tags": ["combo", "flip"]
+    "tags": ["combo", "flip"],
+    "video": "https://www.youtube.com/watch?v=VC4jzFMbGGY"
   },
   {
     "id": "tre_flip",
@@ -109,7 +116,8 @@
     "drills": ["360 shuvit 연습", "짧은 킥플립", "트레 캐치 연습"],
     "prerequisites": ["varial_flip"],
     "risk_level": 4,
-    "tags": ["power", "flip", "advanced"]
+    "tags": ["power", "flip", "advanced"],
+    "video": "https://www.youtube.com/watch?v=tMZbsOZA2Es"
   },
   {
     "id": "boardslide",
@@ -123,7 +131,8 @@
     "drills": ["왁싱된 로우 박스 연습", "짧은 거리 슬라이드", "하차 반복"],
     "prerequisites": ["ollie"],
     "risk_level": 3,
-    "tags": ["slide", "rail"]
+    "tags": ["slide", "rail"],
+    "video": "https://www.youtube.com/watch?v=msrem_0uyOA"
   },
   {
     "id": "fifty_fifty",
@@ -137,7 +146,8 @@
     "drills": ["낮은 커브 50-50", "속도 유지 연습", "안전 하차"],
     "prerequisites": ["ollie"],
     "risk_level": 3,
-    "tags": ["grind", "ledge"]
+    "tags": ["grind", "ledge"],
+    "video": "https://www.youtube.com/watch?v=FvQdYB1s4kY"
   },
   {
     "id": "noseslide",
@@ -151,7 +161,8 @@
     "drills": ["스톨 연습", "짧은 슬라이드", "하차 반복"],
     "prerequisites": ["ollie", "fs180"],
     "risk_level": 3,
-    "tags": ["slide", "nose"]
+    "tags": ["slide", "nose"],
+    "video": "https://www.youtube.com/watch?v=a0Ep3Cbov-I"
   },
   {
     "id": "crooks",
@@ -165,7 +176,8 @@
     "drills": ["락 포지션 스톨", "짧은 크룩", "하차 정확도"],
     "prerequisites": ["noseslide", "fifty_fifty"],
     "risk_level": 4,
-    "tags": ["grind", "technical"]
+    "tags": ["grind", "technical"],
+    "video": "https://www.youtube.com/watch?v=gqDAUNBprm0"
   },
   {
     "id": "smith",
@@ -179,7 +191,8 @@
     "drills": ["스미스 스톨", "낮은 레일 짧은 구간", "속도 확장"],
     "prerequisites": ["boardslide", "fifty_fifty"],
     "risk_level": 4,
-    "tags": ["grind", "rail", "advanced"]
+    "tags": ["grind", "rail", "advanced"],
+    "video": "https://www.youtube.com/watch?v=0NShd98GJ3g"
   },
   {
     "id": "axle_stall",
@@ -193,7 +206,8 @@
     "drills": ["킥턴 안정화", "코핑 탭", "액슬 스톨 짧게"],
     "prerequisites": [],
     "risk_level": 2,
-    "tags": ["transition", "stall"]
+    "tags": ["transition", "stall"],
+    "video": "https://www.youtube.com/watch?v=Vdg2zm4LFfE"
   },
   {
     "id": "rock_to_fakie",
@@ -207,6 +221,7 @@
     "drills": ["락 동작 반복", "낮은 쿼터 연습", "복귀 라인 유지"],
     "prerequisites": ["axle_stall"],
     "risk_level": 2,
-    "tags": ["transition", "fakie"]
+    "tags": ["transition", "fakie"],
+    "video": "https://www.youtube.com/watch?v=SlIuweqP4H4"
   }
 ]

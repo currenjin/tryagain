@@ -360,6 +360,12 @@ function showTrickDetail(trick) {
       <strong>선행 트릭</strong>
       <div style="margin-top:8px; color:#666;">${(trick.prerequisites || []).length ? trick.prerequisites.join(', ') : '없음'}</div>
     </div>
+    ${trick.video ? `<div style="margin-top:16px;">
+      <strong>참고 영상</strong>
+      <div class="trick-video-wrap">
+        <iframe src="https://www.youtube.com/embed/${trick.video.split('v=')[1]}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>` : ''}
   `;
   panel.appendChild(content);
   panel.classList.remove('hidden');
