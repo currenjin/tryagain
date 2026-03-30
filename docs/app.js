@@ -371,9 +371,19 @@ function showTrickDetail(trick) {
   panel.classList.remove('hidden');
 }
 
+function showTrickPlaceholder() {
+  const panel = document.getElementById('detail-panel');
+  panel.innerHTML = '<div id="trick-placeholder">트릭을 선택하세요</div>';
+  panel.classList.remove('hidden');
+}
+
 function closeDetail() {
-  document.getElementById('detail-panel').classList.add('hidden');
   document.querySelectorAll('.spot-item, .trick-item').forEach(el => el.classList.remove('active'));
+  if (activeView === 'tricks' && window.innerWidth > 600) {
+    showTrickPlaceholder();
+    return;
+  }
+  document.getElementById('detail-panel').classList.add('hidden');
 }
 
 function locateMe() {
@@ -430,7 +440,13 @@ function switchView(view) {
   });
 
   document.getElementById('app').classList.toggle('view-tricks', view === 'tricks');
-  closeDetail();
+
+  if (view === 'tricks' && window.innerWidth > 600) {
+    showTrickPlaceholder();
+  } else {
+    document.getElementById('detail-panel').classList.add('hidden');
+    document.querySelectorAll('.spot-item, .trick-item').forEach(el => el.classList.remove('active'));
+  }
 
   const search = document.getElementById('search');
   search.placeholder = view === 'spots' ? '스팟 이름, 주소 검색' : '트릭 이름, 키워드 검색';
