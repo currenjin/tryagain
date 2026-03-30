@@ -236,7 +236,8 @@
     "drills": ["멈춘 상태에서 틸트 감각 익히기", "짧은 거리 매뉴얼", "거리 늘려가기"],
     "prerequisites": [],
     "risk_level": 1,
-    "tags": ["balance", "foundation"]
+    "tags": ["balance", "foundation"],
+    "video": "https://www.youtube.com/watch?v=EoVh5VbgUcQ"
   },
   {
     "id": "nose_manual",
@@ -250,7 +251,8 @@
     "drills": ["정지 노즈 틸트 감각", "짧은 노즈 매뉴얼", "거리 확장"],
     "prerequisites": ["manual"],
     "risk_level": 2,
-    "tags": ["balance", "nose"]
+    "tags": ["balance", "nose"],
+    "video": "https://www.youtube.com/watch?v=4c2oql5epAo"
   },
   {
     "id": "fakie_ollie",
@@ -278,7 +280,8 @@
     "drills": ["정지 상태 놀리 팝", "낮은 높이 놀리", "롤링 놀리"],
     "prerequisites": ["ollie"],
     "risk_level": 2,
-    "tags": ["nollie", "pop"]
+    "tags": ["nollie", "pop"],
+    "video": "https://www.youtube.com/watch?v=P56DfWEtYkE"
   },
   {
     "id": "shuvit",
@@ -418,7 +421,8 @@
     "drills": ["50-50 안정화 후 노즈 들기", "낮은 레지 5-0 스톨", "슬라이드 거리 늘리기"],
     "prerequisites": ["fifty_fifty"],
     "risk_level": 3,
-    "tags": ["grind", "ledge", "nose"]
+    "tags": ["grind", "ledge", "nose"],
+    "video": "https://www.youtube.com/watch?v=A4Pvu3QarUU"
   },
   {
     "id": "nosegrind",
@@ -432,7 +436,8 @@
     "drills": ["노즈 스톨 연습", "앞트럭 락 감각", "짧은 거리 노즈그라인드"],
     "prerequisites": ["noseslide", "crooks"],
     "risk_level": 4,
-    "tags": ["grind", "nose", "technical"]
+    "tags": ["grind", "nose", "technical"],
+    "video": "https://www.youtube.com/watch?v=pQvKKW9Hntg"
   },
   {
     "id": "bluntslide",
