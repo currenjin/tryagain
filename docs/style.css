@@ -504,7 +504,7 @@ body {
 .trick-video-wrap {
   position: relative;
   width: 100%;
-  max-width: 420px;
+  max-width: 560px;
   aspect-ratio: 16 / 9;
   margin-top: 10px;
   background: #000;
