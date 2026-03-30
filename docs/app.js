@@ -429,6 +429,8 @@ function switchView(view) {
     btn.classList.toggle('active', btn.dataset.view === view);
   });
 
+  document.getElementById('app').classList.toggle('view-tricks', view === 'tricks');
+
   const search = document.getElementById('search');
   search.placeholder = view === 'spots' ? '스팟 이름, 주소 검색' : '트릭 이름, 키워드 검색';
   refresh();

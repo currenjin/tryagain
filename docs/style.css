@@ -522,6 +522,19 @@ body {
 .diff-고급 { color: #b91c1c; border-color: #b91c1c; }
 
 /* ─────────────────────────────
+   Tricks mode (map hidden)
+───────────────────────────── */
+#app.view-tricks #map-wrap { display: none; }
+#app.view-tricks #sidebar {
+  flex: 1;
+  min-width: 0;
+  border-right: none;
+}
+
+/* Mobile floating tabs */
+#mobile-tabs { display: none; }
+
+/* ─────────────────────────────
    Map
 ───────────────────────────── */
 #map-wrap { flex: 1; position: relative; }
@@ -803,4 +816,31 @@ body {
   .trick-summary { font-size: 12px; }
 
   #btn-locate { bottom: 12px; right: 16px; padding: 9px 18px; font-size: 12px; }
+
+  /* 모바일 플로팅 탭 */
+  #mobile-tabs {
+    display: flex;
+    position: fixed;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 600;
+    gap: 4px;
+    padding: 4px;
+    background: rgba(10,10,10,0.88);
+    border: 1px solid var(--gold);
+  }
+  #sidebar #view-tabs { display: none; }
+
+  /* 모바일 tricks 모드 */
+  #app.view-tricks #map-wrap { display: none; }
+  #app.view-tricks #sidebar {
+    transform: none !important;
+    position: fixed;
+    inset: 0;
+    height: 100vh;
+    border-top: none;
+    z-index: 200;
+  }
+  #app.view-tricks #btn-list-toggle { display: none !important; }
 }
