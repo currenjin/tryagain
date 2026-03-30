@@ -430,6 +430,7 @@ function switchView(view) {
   });
 
   document.getElementById('app').classList.toggle('view-tricks', view === 'tricks');
+  closeDetail();
 
   const search = document.getElementById('search');
   search.placeholder = view === 'spots' ? '스팟 이름, 주소 검색' : '트릭 이름, 키워드 검색';

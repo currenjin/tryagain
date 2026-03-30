@@ -531,6 +531,26 @@ body {
   border-right: none;
 }
 
+/* Tricks split: sidebar narrows when detail is open */
+#app.view-tricks:has(#detail-panel:not(.hidden)) #sidebar {
+  flex: none;
+  width: 440px;
+  min-width: 440px;
+  border-right: 1px solid var(--border);
+}
+
+/* Tricks split: detail panel becomes right column */
+#app.view-tricks #detail-panel:not(.hidden) {
+  top: 0;
+  left: 440px;
+  bottom: 0;
+  right: 0;
+  width: auto;
+  max-height: none;
+  border-top: none;
+  border-left: 3px solid var(--gold);
+}
+
 /* Mobile floating tabs */
 #mobile-tabs { display: none; }
 
@@ -843,4 +863,17 @@ body {
     z-index: 200;
   }
   #app.view-tricks #btn-list-toggle { display: none !important; }
+
+  /* 모바일 tricks 상세: 바텀시트 (우측 컬럼 오버라이드) */
+  #app.view-tricks #detail-panel:not(.hidden) {
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    bottom: 0;
+    top: auto;
+    max-height: 80vh;
+    border-left: none;
+    border-top: 3px solid var(--gold);
+    z-index: 400;
+  }
 }
